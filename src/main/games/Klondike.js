@@ -93,6 +93,11 @@ class Klondike extends GameWorld {
         }
         this.deck.forEach(element => element.revealed = false);
         this.deck.shuffle();
+        this.checkIfSolvable();
+    }
+
+    checkIfSolvable() {
+        console.log('Maybe');
     }
 
     play() {
