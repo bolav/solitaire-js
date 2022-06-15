@@ -14,6 +14,7 @@ class Klondike extends GameWorld {
         }
         this.stacksOnGround = this.foundations.concat(this.deck, this.waste, this.piles);
         this.generate();
+        this.moved = False;
     }
 
     generate() {
@@ -97,6 +98,9 @@ class Klondike extends GameWorld {
     }
 
     checkIfSolvable() {
+        if (this.moved) {
+            return;
+        }
         for (var i = 0; i < this.piles.length; i++) {
             var j = this.piles[i].size() - 1;
             var chosen = this.piles[i].slice(j);
@@ -105,10 +109,12 @@ class Klondike extends GameWorld {
                 console.log(`Moving ${chosen} from ${i} pos ${j} to ${available}`);
                 this.moveCards(chosen.reverse(), available[0]);
             }
-}
+        }
+        this.moved = true;
     }
 
     play() {
+        this.checkIfSolvable();
         if (this.gameOver || this.deck.position == undefined)
             return;
         // Checks whether the game has already been solved and rest of the moves can be performed automatically
