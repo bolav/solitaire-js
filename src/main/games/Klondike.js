@@ -100,6 +100,7 @@ class Klondike extends GameWorld {
     }
 
     checkIfSolvable() {
+        this.waste_round = 0;
         if (this.moved > 4) {
             return;
         }
@@ -111,69 +112,82 @@ class Klondike extends GameWorld {
         }
         this.moved += 1;
         console.log('moving');
-        for (var i = 0; i < this.piles.length; i++) {
-            for (var j = 0; j < this.piles[i].size() - 1; j++) {
-                if (this.piles[i].get(j).revealed) {
-                    break;
-                }
-            }
-            var chosen = this.piles[i].slice(j);
-            if (chosen.length < 1) {
-                continue;
-            }
-            if (chosen[0].rank === 13 && j === 0) {
-                continue;
-            }
-            var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
-            if (available.length > 0) {
-                console.log(`Moving ${chosen[0].getSpriteName()} from ${i} pos ${j}`);
-                this.moveCards(chosen.reverse(), available[0]);
-                this.waste_round = 0;
-            }
-        }
-        for (var i = 0; i < this.piles.length; i++) {
-            j = this.piles[i].size() - 1;
-            var chosen = this.piles[i].slice(j);
-            if (chosen.length < 1) {
-                continue;
-            }
-            var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
-            if (available.length > 0) {
-available_loop:
-                for (var l = 0; l < available.length; l++) {
-                    for (var k = 0; k < 4; k++) {
-                        if (available[l] === this.foundations[k]) {
-                            console.log(`Moving ${chosen[0].getSpriteName()} to foundation`);
-                            this.moveCards(chosen.reverse(), available[l]);
-                            this.waste_round = 0;
-                            break available_loop;
-                        }
+        var end_now = false;
+        while (!end_now) {
+
+            for (var i = 0; i < this.piles.length; i++) {
+                for (var j = 0; j < this.piles[i].size() - 1; j++) {
+                    if (this.piles[i].get(j).revealed) {
+                        break;
                     }
-    
+                }
+                var chosen = this.piles[i].slice(j);
+                if (chosen.length < 1) {
+                    continue;
+                }
+                if (chosen[0].rank === 13 && j === 0) {
+                    continue;
+                }
+                var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
+                if (available.length > 0) {
+                    console.log(`Moving ${chosen[0].getSpriteName()} from ${i} pos ${j}`);
+                    this.moveCards(chosen.reverse(), available[0]);
+                    this.waste_round = 0;
+                    this.checkIfSolvable();
+                    this.gameStack.undo();
                 }
             }
-        }
-        var chosen = this.waste.peek();
-        if (chosen) { 
-            var available = this.getAvailableMoves(chosen);
-            if (available.length > 0) {
-                console.log(`Moving ${chosen.getSpriteName()} from waste`);
-                this.moveCards([chosen], available[0]);
-                this.waste_round = 0;
-            }    
-        }
-        // Open next card?
-        if (this.moved > 3) {
-            console.log('Open waste');
-            if (this.deck.size() > 0) {
-                this.moveCards([this.deck.peek()], this.waste, [this.deck.peek()]);
-            } else if (this.waste.size() > 0) {
-                var wasteCopy = this.waste.copy();
-                this.moveCards(wasteCopy, this.deck, null, wasteCopy);
-                this.waste_round += 1;
-                console.log(`waste_round ${this.waste_round}`);
+            for (var i = 0; i < this.piles.length; i++) {
+                j = this.piles[i].size() - 1;
+                var chosen = this.piles[i].slice(j);
+                if (chosen.length < 1) {
+                    continue;
+                }
+                var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
+                if (available.length > 0) {
+    available_loop:
+                    for (var l = 0; l < available.length; l++) {
+                        for (var k = 0; k < 4; k++) {
+                            if (available[l] === this.foundations[k]) {
+                                console.log(`Moving ${chosen[0].getSpriteName()} to foundation`);
+                                this.moveCards(chosen.reverse(), available[l]);
+                                this.waste_round = 0;
+                                this.checkIfSolvable();
+                                this.gameStack.undo();
+                                break available_loop;
+                            }
+                        }
+        
+                    }
+                }
             }
-}
+            var chosen = this.waste.peek();
+            if (chosen) { 
+                var available = this.getAvailableMoves(chosen);
+                if (available.length > 0) {
+                    console.log(`Moving ${chosen.getSpriteName()} from waste`);
+                    this.moveCards([chosen], available[0]);
+                    this.checkIfSolvable();
+                    this.gameStack.undo();
+                    this.waste_round = 0;
+                }    
+            }
+            // Open next card?
+            console.log('Open waste');
+                if (this.deck.size() > 0) {
+                    this.moveCards([this.deck.peek()], this.waste, [this.deck.peek()]);
+                } else if (this.waste.size() > 0) {
+                    var wasteCopy = this.waste.copy();
+                    this.moveCards(wasteCopy, this.deck, null, wasteCopy);
+                    this.waste_round += 1;
+                    console.log(`waste_round ${this.waste_round}`);
+                    if (this.waste_round > 2) {
+                        end_now = true;
+                    }
+                }
+        }
+        console.log('done all');
+        this.automove = 0;
     }
 
     play() {
