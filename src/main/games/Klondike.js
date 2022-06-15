@@ -14,7 +14,7 @@ class Klondike extends GameWorld {
         }
         this.stacksOnGround = this.foundations.concat(this.deck, this.waste, this.piles);
         this.generate();
-        this.moved = False;
+        this.moved = false;
     }
 
     generate() {
@@ -106,7 +106,7 @@ class Klondike extends GameWorld {
             var chosen = this.piles[i].slice(j);
             var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
             if (available.length > 0) {
-                console.log(`Moving ${chosen} from ${i} pos ${j} to ${available}`);
+                console.log(`Moving ${JSON.stringify(chosen)} from ${i} pos ${j} to ${available}`);
                 this.moveCards(chosen.reverse(), available[0]);
             }
         }
