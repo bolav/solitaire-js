@@ -102,6 +102,7 @@ class Klondike extends GameWorld {
             console.log('already moved');
             return;
         }
+        this.moved = true;
         console.log('moving');
         for (var i = 0; i < this.piles.length; i++) {
             var j = this.piles[i].size() - 1;
@@ -115,7 +116,6 @@ class Klondike extends GameWorld {
                 this.moveCards(chosen.reverse(), available[0]);
             }
         }
-        this.moved = true;
     }
 
     play() {
