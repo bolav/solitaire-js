@@ -99,7 +99,6 @@ class Klondike extends GameWorld {
 
     checkIfSolvable() {
         if (this.moved) {
-            console.log('already moved');
             return;
         }
         this.moved = true;
