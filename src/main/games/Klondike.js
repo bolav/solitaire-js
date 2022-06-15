@@ -97,7 +97,14 @@ class Klondike extends GameWorld {
     }
 
     checkIfSolvable() {
-        console.log('Maybe');
+        for (var i = 0; i < this.piles.length; i++) {
+            var j = this.piles[i].size() - 1;
+            var chosen = this.piles[i].slice(j);
+            var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
+            if (available.length > 0) {
+                this.moveCards(chosen.reverse(), available[0]);
+            }
+}
     }
 
     play() {
