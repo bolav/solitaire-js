@@ -138,7 +138,6 @@ available_loop:
                     }
     
                 }
-                debugger;
             }
         }
         var chosen = this.waste.peek();
