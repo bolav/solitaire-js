@@ -98,7 +98,7 @@ class Klondike extends GameWorld {
     }
 
     checkIfSolvable() {
-        if (this.moved > 3) {
+        if (this.moved > 4) {
             return;
         }
         this.moved += 1;
@@ -128,9 +128,15 @@ class Klondike extends GameWorld {
             }    
         }
         // Open next card?
-        if (this.moved > 0) {
+        if (this.moved > 3) {
             console.log('Open waste');
-        }
+            if (this.deck.size() > 0) {
+                this.moveCards([this.deck.peek()], this.waste, [this.deck.peek()]);
+            } else if (this.waste.size() > 0) {
+                var wasteCopy = this.waste.copy();
+                this.moveCards(wasteCopy, this.deck, null, wasteCopy);
+            }
+}
     }
 
     play() {
