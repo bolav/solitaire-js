@@ -92,7 +92,7 @@ class GameWorld {
      * @param {Array.<Card>} unreveal 
      */
     moveCards(cards, destination, reveal = null, unreveal = null) {
-        this.moved = false;
+        this.moved = 0;
         var move = new GameNode();
         move.cardsMoved = cards;
         if (cards.some(element => element.stack instanceof PyramidStack)) {

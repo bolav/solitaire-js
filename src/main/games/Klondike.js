@@ -14,7 +14,7 @@ class Klondike extends GameWorld {
         }
         this.stacksOnGround = this.foundations.concat(this.deck, this.waste, this.piles);
         this.generate();
-        this.moved = false;
+        this.moved = 0;
     }
 
     generate() {
@@ -98,10 +98,10 @@ class Klondike extends GameWorld {
     }
 
     checkIfSolvable() {
-        if (this.moved) {
+        if (this.moved > 3) {
             return;
         }
-        this.moved = true;
+        this.moved += 1;
         console.log('moving');
         for (var i = 0; i < this.piles.length; i++) {
             var j = this.piles[i].size() - 1;
