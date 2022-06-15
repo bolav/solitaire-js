@@ -111,9 +111,15 @@ class Klondike extends GameWorld {
             }
             var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
             if (available.length > 0) {
-                console.log(`Moving ${chosen[0].getSpriteName()} from ${i} pos ${j} to ${available}`);
+                console.log(`Moving ${chosen[0].getSpriteName()} from ${i} pos ${j}`);
                 this.moveCards(chosen.reverse(), available[0]);
             }
+        }
+        var chosen = this.waste.peek();
+        var available = this.getAvailableMoves(chosen);
+        if (available.length > 0) {
+            console.log(`Moving ${chosengetSpriteName()} from waste`);
+            this.moveCards([chosen], available[0]);
         }
     }
 
