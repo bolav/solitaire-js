@@ -15,6 +15,8 @@ class Klondike extends GameWorld {
         this.stacksOnGround = this.foundations.concat(this.deck, this.waste, this.piles);
         this.generate();
         this.moved = 0;
+        this.automove = true;
+        this.waste_round = 0;
     }
 
     generate() {
@@ -101,6 +103,12 @@ class Klondike extends GameWorld {
         if (this.moved > 4) {
             return;
         }
+        if (!this.automove) {
+            return;
+        }
+        if (this.waste_round > 3) {
+            this.automove = 0;
+        }
         this.moved += 1;
         console.log('moving');
         for (var i = 0; i < this.piles.length; i++) {
@@ -120,6 +128,7 @@ class Klondike extends GameWorld {
             if (available.length > 0) {
                 console.log(`Moving ${chosen[0].getSpriteName()} from ${i} pos ${j}`);
                 this.moveCards(chosen.reverse(), available[0]);
+                this.waste_round = 0;
             }
         }
         for (var i = 0; i < this.piles.length; i++) {
@@ -136,6 +145,7 @@ available_loop:
                         if (available[l] === this.foundations[k]) {
                             console.log(`Moving ${chosen[0].getSpriteName()} to foundation`);
                             this.moveCards(chosen.reverse(), available[l]);
+                            this.waste_round = 0;
                             break available_loop;
                         }
                     }
@@ -144,11 +154,12 @@ available_loop:
             }
         }
         var chosen = this.waste.peek();
-        if (chosen) {
+        if (chosen) { 
             var available = this.getAvailableMoves(chosen);
             if (available.length > 0) {
                 console.log(`Moving ${chosen.getSpriteName()} from waste`);
                 this.moveCards([chosen], available[0]);
+                this.waste_round = 0;
             }    
         }
         // Open next card?
@@ -159,6 +170,7 @@ available_loop:
             } else if (this.waste.size() > 0) {
                 var wasteCopy = this.waste.copy();
                 this.moveCards(wasteCopy, this.deck, null, wasteCopy);
+                this.waste_round += 1;
             }
 }
     }
