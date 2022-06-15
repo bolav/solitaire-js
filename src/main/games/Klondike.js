@@ -126,7 +126,9 @@ class Klondike extends GameWorld {
                 continue;
             }
             var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
-            debugger;
+            if (available.length > 0) {
+                debugger;
+            }
         }
         var chosen = this.waste.peek();
         if (chosen) {
