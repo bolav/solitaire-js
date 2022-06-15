@@ -171,6 +171,7 @@ available_loop:
                 var wasteCopy = this.waste.copy();
                 this.moveCards(wasteCopy, this.deck, null, wasteCopy);
                 this.waste_round += 1;
+                console.log(`waste_round ${this.waste_round}`);
             }
 }
     }
