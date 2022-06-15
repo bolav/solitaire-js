@@ -127,6 +127,10 @@ class Klondike extends GameWorld {
                 this.moveCards([chosen], available[0]);
             }    
         }
+        // Open next card?
+        if (this.moved > 0) {
+            console.log('Open waste');
+        }
     }
 
     play() {
