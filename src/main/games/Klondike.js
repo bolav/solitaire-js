@@ -99,8 +99,10 @@ class Klondike extends GameWorld {
 
     checkIfSolvable() {
         if (this.moved) {
+            console.log('already moved');
             return;
         }
+        console.log('moving');
         for (var i = 0; i < this.piles.length; i++) {
             var j = this.piles[i].size() - 1;
             var chosen = this.piles[i].slice(j);
