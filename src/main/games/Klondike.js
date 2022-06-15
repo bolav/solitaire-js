@@ -106,6 +106,9 @@ class Klondike extends GameWorld {
         for (var i = 0; i < this.piles.length; i++) {
             var j = this.piles[i].size() - 1;
             var chosen = this.piles[i].slice(j);
+            if (!chosen) {
+                continue;
+            }
             var available = this.getAvailableMoves(chosen[0], chosen.length > 1);
             if (available.length > 0) {
                 console.log(`Moving ${chosen[0].getSpriteName()} from ${i} pos ${j} to ${available}`);
